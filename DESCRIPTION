@@ -1,0 +1,15 @@
+Package: expressalyzr
+Type: Package
+Title: Gate and compensate flow cytometry data
+Version: 0.0.0.9000
+Authors@R: person("Timothy", "Frei", email = "frei.timothy@gmail.com", role = c("aut", "cre"))
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GLP-3
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    data.table
+Suggests: 
+    testthat
