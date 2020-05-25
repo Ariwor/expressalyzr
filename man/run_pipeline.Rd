@@ -14,5 +14,5 @@ Run the data processing pipline that links together other functions in the
  expressalyzr package.
 }
 \examples{
- run_pipeline()
+run_pipeline()
 }

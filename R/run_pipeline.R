@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#'  run_pipeline()
+#' run_pipeline()
 run_pipeline <- function() {
 
 }
