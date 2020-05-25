@@ -11,7 +11,8 @@ Encoding: UTF-8
 LazyData: true
 biocViews:
 Imports: 
-    data.table
+    data.table,
+    ncdfFlow
 Suggests: 
     testthat
 RoxygenNote: 7.1.0
