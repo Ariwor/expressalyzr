@@ -11,7 +11,7 @@
 #' path <- system.file("extdata", "example_fcs_files", package = "expressalyzr", mustWork = TRUE)
 #' gating_set <- load_fcs(path)
 load_fcs <- function(file_path) {
-  fcs_files <- list.files(path = file_path, pattern = "^.*\\.fcs$")
+  fcs_files <- list.files(path = file_path, pattern = "^.*\\.fcs$", full.names = TRUE)
   if (identical(fcs_files, character(0))) {
     stop("The specified file path does either not exist or not contain any .fcs files.")
   } else {
