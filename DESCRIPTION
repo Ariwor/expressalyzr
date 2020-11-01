@@ -15,7 +15,8 @@ Imports:
     ncdfFlow,
     flowWorkspace,
     config,
-    flowCore
+    flowCore,
+    openCyto
 Suggests: 
     testthat,
     spelling
