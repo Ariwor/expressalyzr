@@ -1,5 +1,4 @@
 alias, pop, parent, dims, gating_method, gating_args, collapseDataForGating, groupBy, preprocessing_method, preprocessing_args
-cells1, +, root, "FSC-A,SSC-A", mixtureGate, "n_clusters = 4:5, n_samples = 1000, th = 1e-2, log_t = TRUE", , , ,
-cells2, +, cells1, "FSC-A,SSC-A", mixtureGate, "n_clusters = 1:2, n_samples = 2000", , , ,
-singlets, +, cells2, "FSC-A,FSC-H", singletGate, , , , , 
-  
+cells1, +, root, "FSC-A,SSC-A", mixture_gate, "n_clusters = 4:5, n_samples = 1000, th = 1e-2, log_t = TRUE", , , ,
+cells2, +, cells1, "FSC-A,SSC-A", mixture_gate, "n_clusters = 1:2, n_samples = 2000", , , ,
+singlets, +, cells2, "FSC-A,FSC-H", singletGate, , , , ,
