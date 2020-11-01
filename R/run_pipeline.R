@@ -8,6 +8,13 @@
 #'
 #' @examples
 #' run_pipeline()
-run_pipeline <- function() {
+run_pipeline <- function(data_path) {
 
+  experiment_name <- basename(data_path)
+
+  create_data_subdir(data_path)
+
+
+
+  cs <- load_fcs(data_path)
 }
