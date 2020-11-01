@@ -1,0 +1,5 @@
+alias, pop, parent, dims, gating_method, gating_args, collapseDataForGating, groupBy, preprocessing_method, preprocessing_args
+pre_1, +, root, "FSC-A,SSC-A", mixture_gate, "n_clusters = 1:2", , , ,
+pre_2, +, pre_1, "FSC-A,SSC-A", mixture_gate, "n_clusters = 1:2, th = 1e-13", , , ,
+beads, +, pre_2, "FSC-A,SSC-A", mixture_gate, "n_clusters = 1, th = 2e-12", , , ,
+singlets, +, beads, "FSC-A,FSC-H", singletGate, , , , ,
