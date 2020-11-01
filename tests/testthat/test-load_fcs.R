@@ -17,6 +17,7 @@ test_that("existing file paths with no .fcs files throw an error", {
   expect_error(load_fcs(test_dir_path), "^.* not contain any .*$")
   # clean up
   expect_equal(unlink(test_dir_path, recursive = TRUE), 0)
+  expect_false(dir.exists(test_dir_path))
 })
 
 #### return value  ####
