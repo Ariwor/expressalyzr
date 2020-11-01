@@ -13,7 +13,7 @@
 load_fcs <- function(file_path) {
 
   data_dir <- file.path(file_path, "data")
-  fcs_files <- list.files(path = file_path, pattern = "^.*\\.fcs$", full.names = TRUE)
+  fcs_files <- list.files(path = data_dir, pattern = "^.*\\.fcs$", full.names = TRUE)
 
   if (identical(fcs_files, character(0))) {
 
@@ -86,7 +86,7 @@ load_config <- function(data_path) {
 
   config_file_path <- file.path(data_path, "config.yml")
 
-  if (!exists(config_file_path)) {
+  if (!file.exists(config_file_path)) {
 
     template_path <- system.file("tools", "config_template.yml",
                                  package = "expressalyzr",
