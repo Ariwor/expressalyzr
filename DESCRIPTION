@@ -16,7 +16,8 @@ Imports:
     flowWorkspace,
     config,
     flowCore,
-    openCyto
+    openCyto,
+    Rmixmod
 Suggests: 
     testthat,
     spelling
