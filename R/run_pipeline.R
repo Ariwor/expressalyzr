@@ -14,7 +14,7 @@ run_pipeline <- function(data_path) {
 
   create_data_subdir(data_path)
 
-
+  config <- load_config(data_path)
 
   cs <- load_fcs(data_path)
 }

@@ -78,17 +78,20 @@ create_data_subdir <- function(data_path) {
 #'
 #' @example
 #'
-manage_config <- function(data_path) {
+load_config <- function(data_path) {
 
   config_file_path <- file.path(data_path, "config.yml")
 
   if (!exists(config_file_path)) {
+
     template_path <- system.file("tools", "config_template.yml",
                                  package = "expressalyzr",
                                  mustWork = TRUE)
     file.copy(template_path, config_file_path)
     file.edit(config_file_path)
+
+    readline(prompt = "Press [Enter] to continue.")
   }
 
-  config <- config::get(file = config_file_path)
+  return(config::get(file = config_file_path))
 }
