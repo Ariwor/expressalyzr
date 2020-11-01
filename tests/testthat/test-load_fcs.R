@@ -1,6 +1,6 @@
 context("test fcs file loading")
 
-## errors if non-existant file path or no .fcs files in the directory
+#### errors if non-existant file path or no .fcs files in the directory ####
 
 test_that("non-existing file paths throw an error", {
   test_file_path <- "./does_not_exist/"
@@ -21,7 +21,7 @@ test_that("existing file paths with no .fcs files throw an error", {
   expect_equal(unlink(test_file_path, recursive = TRUE), 0)
 })
 
-## return value
+#### return value  ####
 
 test_that("a gating set is returned", {
   test_file_path <- system.file("extdata", "example_fcs_files", package = "expressalyzr", mustWork = TRUE)
