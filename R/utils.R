@@ -95,3 +95,14 @@ load_config <- function(data_path) {
 
   return(config::get(file = config_file_path))
 }
+
+#' Compute the coefficient of variation
+#'
+comp_cv <- function(x, log_t = FALSE) {
+
+  if (log_t) {
+    x <- log(x[x > 0])
+  }
+
+  return(sd(x) / mean(x))
+}
