@@ -13,7 +13,8 @@ biocViews:
 Imports: 
     data.table,
     ncdfFlow,
-    flowWorkspace
+    flowWorkspace,
+    config
 Suggests: 
     testthat
 RoxygenNote: 7.1.0
