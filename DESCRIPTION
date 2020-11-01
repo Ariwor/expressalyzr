@@ -14,7 +14,8 @@ Imports:
     data.table,
     ncdfFlow,
     flowWorkspace,
-    config
+    config,
+    flowCore
 Suggests: 
     testthat,
     spelling
