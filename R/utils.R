@@ -83,6 +83,12 @@ manage_config <- function(data_path) {
   config_file_path <- file.path(data_path, "config.yml")
 
   if (!exists(config_file_path)) {
-
+    template_path <- system.file("tools", "config_template.yml",
+                                 package = "expressalyzr",
+                                 mustWork = TRUE)
+    file.copy(template_path, config_file_path)
+    file.edit(config_file_path)
   }
+
+  config <- config::get(file = config_file_path)
 }

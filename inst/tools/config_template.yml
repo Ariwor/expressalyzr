@@ -1,0 +1,4 @@
+cytoflex:
+  spec_file: "your_experimental_specs.csv"
+  bg_cutoff: 0.99
+  controls: "Controls"
