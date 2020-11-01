@@ -1,4 +1,4 @@
-#' Load .fcs files
+#' Load .fcs files.
 #'
 #' Load .fcs files into GatingSet object using read.ncdfFlowSet function.
 #'
@@ -31,7 +31,7 @@ load_fcs_ncdf <- function(file_path) {
   return(gating_set)
 }
 
-#' Create data subdirectory
+#' Create data subdirectory.
 #'
 #' This is a utility function for creating a subdirectory for the data in the
 #' data path and moving the data files into the new directory. This way the
@@ -67,7 +67,7 @@ create_data_subdir <- function(data_path) {
   return(output)
 }
 
-#' Create and/or load configuration file
+#' Create and/or load configuration file.
 #'
 #' A configuration file is created from a template and opened for editing.
 #' After editing is complete or if a configuration file already exists
