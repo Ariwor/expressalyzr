@@ -107,3 +107,22 @@ run_fit <- function(x, y, f) {
 #'
 #'
 bead_model <- function(x, m, b, a) exp((log(x + a) - b) / m)
+
+#' Transform arbitrary values.
+#'
+apply_transform <- function(data, t_fun) {
+
+  chs <- flowCore::colnames(data)
+  chs <- channels[grepl("FL", chs)]
+
+  set_fun <- function(channel) {
+    force(channel)
+    out_f <- function(values) t_fun(values, channel)
+    return(out_f)
+  }
+
+  t_list <- lapply(chs, set_fun)
+  t_list <- flowCore::transformList(trans_ch, fun_list)
+
+  return(flowCore::transform(data, t_list))
+}
