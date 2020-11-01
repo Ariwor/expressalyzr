@@ -12,7 +12,9 @@ LazyData: true
 biocViews:
 Imports: 
     data.table,
-    ncdfFlow
+    ncdfFlow,
+    flowWorkspace
 Suggests: 
     testthat
 RoxygenNote: 7.1.0
+Config/testthat/edition: 3
