@@ -1,4 +1,5 @@
 default:
   spec_file: "your_experimental_specs.csv"
   bg_cutoff: 0.99
-  controls: "Controls"
+  controls_pattern: "Controls"
+  beads_pattern: "Beads"
