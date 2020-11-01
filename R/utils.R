@@ -1,3 +1,36 @@
+#' Load .fcs files
+#'
+#' Load .fcs files into GatingSet object using read.ncdfFlowSet function.
+#'
+#' @param file_path The path to the .fcs files that are to be loaded.
+#'
+#' @return A GatingSet object.
+#' @export
+#'
+#' @examples
+#' path <- system.file("extdata", "example_fcs_files", package = "expressalyzr", mustWork = TRUE)
+#' gating_set <- load_fcs(path)
+load_fcs <- function(file_path) {
+  fcs_files <- list.files(path = file_path, pattern = "^.*\\.fcs$", full.names = TRUE)
+  if (identical(fcs_files, character(0))) {
+    stop("The specified file path does either not exist or does not contain any .fcs files.")
+  } else {
+    gating_set <- flowWorkspace::load_cytoset_from_fcs(files = fcs_files)
+  }
+  return(gating_set)
+}
+
+# this function causes a segfault form C stack overflow on my computer
+load_fcs_ncdf <- function(file_path) {
+  fcs_files <- list.files(path = file_path, pattern = "^.*\\.fcs$", full.names = TRUE)
+  if (identical(fcs_files, character(0))) {
+    stop("The specified file path does either not exist or does not contain any .fcs files.")
+  } else {
+    gating_set <- ncdfFlow::read.ncdfFlowSet(fcs_files)
+  }
+  return(gating_set)
+}
+
 #' Create data subdirectory
 #'
 #' This is a utility function for creating a subdirectory for the data in the
@@ -11,7 +44,6 @@
 #'
 #' @example
 #'
-
 create_data_subdir <- function(data_path) {
 
   new_data_path <- file.path(data_path, "data")
@@ -34,3 +66,15 @@ create_data_subdir <- function(data_path) {
 
   return(output)
 }
+
+#' Create and/or load configuration file
+#'
+#' A configuration file is created from a template and opened for editing.
+#' After editing is complete or if a configuration file already exists
+#' the file is loaded.
+#'
+#' @param
+#' @export
+#'
+#' @example
+#'
