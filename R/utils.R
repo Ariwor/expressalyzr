@@ -78,3 +78,11 @@ create_data_subdir <- function(data_path) {
 #'
 #' @example
 #'
+manage_config <- function(data_path) {
+
+  config_file_path <- file.path(data_path, "config.yml")
+
+  if (!exists(config_file_path)) {
+
+  }
+}
