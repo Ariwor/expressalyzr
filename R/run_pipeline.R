@@ -72,7 +72,7 @@ run_pipeline <- function(data_path) {
                                config$density_th,
                                config$manual_comp)
 
-    save(so_mat, so_mat_path)
+    save(so_mat, file = so_mat_path)
   } else (
     load(so_mat_path)
   )
@@ -100,6 +100,7 @@ run_pipeline <- function(data_path) {
 
   if (file.exists(s_file_path)) {
     s_file <- data.table::fread(s_file_path)
+    browser()
     data_dt <- merge(data_dt, s_file, by = config$merge_by, all.x = TRUE)
   }
 
