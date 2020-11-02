@@ -139,6 +139,6 @@ cf_to_dt <- function(cf) {
 #'
 #'
 cs_to_dt <- function(cs) {
-  data_dt <- flowWorkspace::lapply(cd, to_data.table)
+  data_dt <- flowWorkspace::lapply(cs, cf_to_dt)
   return(data.table::rbindlist(data_dt, idcol = "File"))
 }
