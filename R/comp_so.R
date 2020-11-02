@@ -110,6 +110,7 @@ filter_density <- function(data, channels, bins, th) {
   out_data <- sapply(unique(data_dt$File), to_data.frame,
                      simplify = FALSE, USE.NAMES = TRUE)
 
+  browser()
   out_data <- flowWorkspace::flowSet_to_cytoset(flowCore::flowSet(out_data))
 
   if (l_data != length(out_data)) {
