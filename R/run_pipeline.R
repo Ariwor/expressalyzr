@@ -28,11 +28,16 @@ run_pipeline <- function(data_path) {
     cs <- cs[!bead_index]
 
     t_fun <- generate_transformation(cs_beads)
+    trans <- TRUE
 
   } else if (sum(bead_index) > 1) {
 
     stop("More than one bead sample found in the dataset. Please restricit the
          bead_pattern to one sample.")
+  } else {
+
+    message("No bead sample found. Values will not be transformed to MEFL.")
+    trans <- FALSE
   }
 
   # gating
@@ -49,6 +54,18 @@ run_pipeline <- function(data_path) {
 
   data_dt <- flowWorkspace::gs_pop_get_data(gs, y = "singlets")
 
-  trans_dt <- apply_transform(data_dt)
+  if (trans) {
+    data_dt <- apply_transform(data_dt)
+  }
 
+  cont_index <- grepl(config$controls_pattern, flowCore::sampleNames(data_dt))
+  cont_dt <- data_dt[cont_index]
+  data_dt <- data_dt[!cont_index]
+
+  so_mat <- spillover_matrix(cont_dt,
+                             config$controls_index,
+                             config$comp_pattern,
+                             config$manual_comp)
+
+  flowCore::compensate(data_dt, so_mat)
 }

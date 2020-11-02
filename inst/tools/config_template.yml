@@ -3,3 +3,6 @@ default:
   bg_cutoff: 0.99
   controls_pattern: "Controls"
   beads_pattern: "Beads"
+  controls_index: !expr c(1, 2, 3, 4, 5) # (Unstained, FL1, FL3, FL6, FL11)
+  comp_pattern: "-A"
+  manual_comp: FALSE
