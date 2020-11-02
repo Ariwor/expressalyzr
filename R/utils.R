@@ -55,7 +55,7 @@ create_data_subdir <- function(data_path) {
   if (!dir.exists(new_data_path)) {
     # create new folder
     data_files <- list.files(data_path)
-    data_files <- data_files[grepl("\\.R", data_files)]
+    data_files <- data_files[!grepl("\\.R|\\.yml", data_files)]
     create_out <- dir.create(new_data_path)
 
     # move files
