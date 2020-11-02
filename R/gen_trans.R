@@ -122,7 +122,7 @@ apply_transform <- function(data, t_fun) {
   }
 
   t_list <- lapply(chs, set_fun)
-  t_list <- flowCore::transformList(trans_ch, fun_list)
+  t_list <- flowCore::transformList(chs, t_list)
 
-  return(flowCore::transform(data, t_list))
+  return(flowWorkspace::transform(data, t_list))
 }
