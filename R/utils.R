@@ -93,10 +93,10 @@ load_config <- function(data_path) {
                                  package = "expressalyzr",
                                  mustWork = TRUE)
     file.copy(template_path, config_file_path)
-    file.edit(config_file_path)
-
-    readline(prompt = "Press [Enter] to continue.")
   }
+
+  file.edit(config_file_path)
+  readline(prompt = "\nPress [Enter] to continue.")
 
   return(config::get(file = config_file_path))
 }
