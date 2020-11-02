@@ -17,7 +17,8 @@ Imports:
     config,
     flowCore,
     openCyto,
-    Rmixmod
+    Rmixmod,
+    ggcyto
 Suggests: 
     testthat,
     spelling
