@@ -1,5 +1,6 @@
 default:
   spec_file: "your_experimental_specs.csv"
+  merge_by: !expr c("Row", "Column")
   bg_cutoff: 0.99
   controls_pattern: "Controls"
   beads_pattern: "Beads"

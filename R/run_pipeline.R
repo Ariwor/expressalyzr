@@ -87,5 +87,12 @@ run_pipeline <- function(data_path) {
   pos_chs <- paste0(chs, "_pos")
   data_dt[, (pos_chs) := lapply(chs, function(ch) f_pos(ch, get(ch))), by = .(File)]
 
+  s_file_path <- file.path(data_path, config$spec_file)
+
+  if (file.exists(s_file_path)) {
+    s_file <- data.table::fread(s_file_path)
+    data_dt <- merge(data_dt, s_file, by = config$merge_by, all.x = TRUE)
+  }
+
   return(data_dt)
 }
