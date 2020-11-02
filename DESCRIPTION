@@ -18,7 +18,8 @@ Imports:
     flowCore,
     openCyto,
     Rmixmod,
-    ggcyto
+    ggcyto,
+    ggplot2
 Suggests: 
     testthat,
     spelling
