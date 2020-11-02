@@ -113,7 +113,7 @@ bead_model <- function(x, m, b, a) exp((log(x + a) - b) / m)
 apply_transform <- function(data, t_fun) {
 
   chs <- flowCore::colnames(data)
-  chs <- channels[grepl("FL", chs)]
+  chs <- chs[grepl("FL", chs)]
 
   set_fun <- function(channel) {
     force(channel)
