@@ -110,3 +110,21 @@ comp_cv <- function(x, log_t = FALSE) {
 
   return(sd(x) / mean(x))
 }
+
+#' Quantile-based binning function.
+#'
+q_bin <- function(x, bins, ql = 0, qh = 1, s_fun = NULL) {
+
+  qs <- seq(ql, qh, length.out = bins + 1)
+  breaks <- quantile(x, qs)
+
+  bins <- cut(x, breaks, labels = FALSE, include.lowest = TRUE)
+
+  if (!is.null(s_fun)) {
+    t_dt <- data.table::data.table(bin = bins, x)[, s_fun(x), by = .(bin)]
+    bins <- merge(data.table::data.table(bin = bins), t_dt,
+                  by = "bin", all.x = TRUE, sort = FALSE)$V1
+  }
+
+  return(bins)
+}
