@@ -128,3 +128,17 @@ q_bin <- function(x, bins, ql = 0, qh = 1, s_fun = NULL) {
 
   return(bins)
 }
+
+#'
+#'
+cf_to_dt <- function(cf) {
+  values <- flowCore::exprs(cf)
+  return(data.table::as.data.table(values))
+}
+
+#'
+#'
+cs_to_dt <- function(cs) {
+  data_dt <- flowWorkspace::lapply(cd, to_data.table)
+  return(data.table::rbindlist(data_dt, idcol = "File"))
+}

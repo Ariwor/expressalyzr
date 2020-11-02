@@ -86,13 +86,7 @@ filter_density <- function(data, channels, bins, th) {
 
   l_data <- length(data)
 
-  to_data.table <- function(cf) {
-    values <- flowCore::exprs(cf)
-    return(data.table::as.data.table(values))
-  }
-
-  data_dt <- flowWorkspace::lapply(data, to_data.table)
-  data_dt <- data.table::rbindlist(data_dt, idcol = "File")
+  data_dt <- cs_to_dt(data)
 
   chs <- paste0(channels, "_bin")
 
