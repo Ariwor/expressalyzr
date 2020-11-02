@@ -52,20 +52,40 @@ run_pipeline <- function(data_path) {
 
   openCyto::gt_gating(gt, gs)
 
-  data_dt <- flowWorkspace::gs_pop_get_data(gs, y = "singlets")
+  data_cs <- flowWorkspace::gs_pop_get_data(gs, y = "singlets")
 
   if (trans) {
-    data_dt <- apply_transform(data_dt)
+    data_cs <- apply_transform(data_cs)
   }
 
-  cont_index <- grepl(config$controls_pattern, flowCore::sampleNames(data_dt))
-  cont_dt <- data_dt[cont_index]
-  data_dt <- data_dt[!cont_index]
+  cont_index <- grepl(config$controls_pattern, flowCore::sampleNames(data_cs))
+  cont_cs <- data_cs[cont_index]
+  data_cs <- data_cs[!cont_index]
 
-  so_mat <- spillover_matrix(cont_dt,
+  so_mat <- spillover_matrix(cont_cs,
                              config$controls_index,
                              config$comp_pattern,
+                             config$density_th,
                              config$manual_comp)
 
-  flowCore::compensate(data_dt, so_mat)
+  data_cs <- flowWorkspace::compensate(data_cs, so_mat)
+
+  # convert cytoset to data table
+  data_dt <- cs_to_dt(data_cs)
+
+  chs <- colnames(data_dt)[grepl("FL", colnames(data_dt))]
+
+  data_dt[, no_negative := rowSums(data_dt[, chs, with = FALSE] <= 0) == 0]
+  cont_dt <- cs_to_dt(cont_cs[config$controls_index[1]])
+
+  cont_dt[, lapply(mget(chs), quantile, config$bg_cutoff),
+          by = .(File)]
+  bg_dt <- cont_dt[, lapply(mget(chs), quantile, config$bg_cutoff)]
+
+  f_pos <- function(channel, values) values >= bg_dt[[channel]]
+
+  pos_chs <- paste0(chs, "_pos")
+  data_dt[, (pos_chs) := lapply(chs, function(ch) f_pos(ch, get(ch))), by = .(File)]
+
+  return(data_dt)
 }

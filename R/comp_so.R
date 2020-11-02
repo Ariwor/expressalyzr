@@ -1,6 +1,6 @@
 #' Compute the spillover matrix based on single color transfection controls.
 #'
-spillover_matrix <- function(data, cont_ind, comp_pattern, manual_comp) {
+spillover_matrix <- function(data, cont_ind, comp_pattern, threshold, manual_comp) {
 
   if (length(data) != length(cont_ind)) {
     stop("Number of control samples and index of control samples are of different length.")
@@ -15,7 +15,6 @@ spillover_matrix <- function(data, cont_ind, comp_pattern, manual_comp) {
   chs_all <- flowCore::colnames(data)
   chs <- chs_all[grepl(comp_pattern, chs_all)]
 
-  threshold <- 1e-3
   n_bins <- 32
 
   data <- filter_density(data, chs, n_bins, threshold)
