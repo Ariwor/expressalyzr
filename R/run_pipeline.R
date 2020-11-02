@@ -55,7 +55,7 @@ run_pipeline <- function(data_path) {
   data_cs <- flowWorkspace::gs_pop_get_data(gs, y = "singlets")
 
   if (trans) {
-    data_cs <- apply_transform(data_cs)
+    data_cs <- apply_transform(data_cs, t_fun)
   }
 
   cont_index <- grepl(config$controls_pattern, flowCore::sampleNames(data_cs))
