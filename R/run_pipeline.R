@@ -58,15 +58,24 @@ run_pipeline <- function(data_path) {
     data_cs <- apply_transform(data_cs, t_fun)
   }
 
-  cont_index <- grepl(config$controls_pattern, flowCore::sampleNames(data_cs))
-  cont_cs <- data_cs[cont_index]
-  data_cs <- data_cs[!cont_index]
+  # compensation
+  so_mat_path <- file.path(data_path, "so_mat.RData")
 
-  so_mat <- spillover_matrix(cont_cs,
-                             config$controls_index,
-                             config$comp_pattern,
-                             config$density_th,
-                             config$manual_comp)
+  if (!file.exists(so_mat_path) || config$redo_comp) {
+    cont_index <- grepl(config$controls_pattern, flowCore::sampleNames(data_cs))
+    cont_cs <- data_cs[cont_index]
+    data_cs <- data_cs[!cont_index]
+
+    so_mat <- spillover_matrix(cont_cs,
+                               config$controls_index,
+                               config$comp_pattern,
+                               config$density_th,
+                               config$manual_comp)
+
+    save(so_mat, so_mat_path)
+  } else (
+    load(so_mat_path)
+  )
 
   data_cs <- flowWorkspace::compensate(data_cs, so_mat)
 
