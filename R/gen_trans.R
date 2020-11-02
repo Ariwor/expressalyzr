@@ -57,17 +57,19 @@ generate_transformation <- function(data) {
   tall_dt[, c("Slope", "Intercept", "Auto") := as.list(run_fit(MEFL, Intensity, sos)),
           by = .(Channel)]
 
-  # tall_dt[, Fit := bead_model(MEFL, Slope, Intercept, Auto), by = .(Channel)]
-  #
-  # ggplot(tall_dt,
-  #        aes(x = Intensity,
-  #            y = MEFL)) +
-  #   geom_line(aes(x = Fit)) +
-  #   geom_point(size = 3,
-  #              aes(color = as.factor(Peak))) +
-  #   scale_x_continuous(trans = "log") +
-  #   scale_y_continuous(trans = "log") +
-  #   facet_wrap(~Channel)
+  tall_dt[, Fit := bead_model(MEFL, Slope, Intercept, Auto), by = .(Channel)]
+
+  pl <- ggplot(tall_dt,
+         aes(x = Intensity,
+             y = MEFL)) +
+    geom_line(aes(x = Fit)) +
+    geom_point(size = 3,
+               aes(color = as.factor(Peak))) +
+    scale_x_continuous(trans = "log") +
+    scale_y_continuous(trans = "log") +
+    facet_wrap(~Channel)
+
+  print(pl)
 
   trans_par <- unique(tall_dt[, .(Channel, Slope, Intercept)])
   trans_fun <- function(value, channel) {
