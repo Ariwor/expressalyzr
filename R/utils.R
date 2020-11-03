@@ -44,9 +44,6 @@ load_fcs_ncdf <- function(file_path) {
 #' @param data_path The path to the original data directory.
 #'
 #' @return
-#' @export
-#'
-#' @example
 #'
 create_data_subdir <- function(data_path) {
 
@@ -80,8 +77,6 @@ create_data_subdir <- function(data_path) {
 #'
 #' @param data_path The path to the original data directory.
 #'
-#' @example
-#'
 #' @export
 load_config <- function(data_path) {
 
@@ -109,7 +104,7 @@ comp_cv <- function(x, log_t = FALSE) {
     x <- log(x[x > 0])
   }
 
-  return(sd(x) / mean(x))
+  return(stats::sd(x) / mean(x))
 }
 
 #' Quantile-based binning function.

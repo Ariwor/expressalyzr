@@ -6,8 +6,6 @@
 #' @return
 #' @export
 #'
-#' @examples
-#' run_pipeline()
 run_pipeline <- function(data_path) {
 
   # initialize
