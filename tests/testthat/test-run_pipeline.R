@@ -8,7 +8,7 @@ test_that("remove later", {
   expect_true(dir.create(test_data_dir, recursive = TRUE))
   expect_true(all(file.copy(fcs_files, test_data_dir)))
 
-  run_pipeline(test_dir)
+  # run_pipeline(test_dir)
 
   expect_equal(unlink(test_dir, recursive = TRUE), 0)
   expect_false(dir.exists(test_dir))
