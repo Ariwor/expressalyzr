@@ -4,7 +4,7 @@
 \alias{run_pipeline}
 \title{Run the data processing pipline}
 \usage{
-run_pipeline()
+run_pipeline(data_path)
 }
 \value{
 
@@ -12,7 +12,4 @@ run_pipeline()
 \description{
 Run the data processing pipline that links together other functions in the
  expressalyzr package.
-}
-\examples{
-run_pipeline()
 }
