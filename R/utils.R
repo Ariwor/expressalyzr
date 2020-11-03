@@ -78,11 +78,11 @@ create_data_subdir <- function(data_path) {
 #' After editing is complete or if a configuration file already exists
 #' the file is loaded.
 #'
-#' @param
-#' @export
+#' @param data_path The path to the original data directory.
 #'
 #' @example
 #'
+#' @export
 load_config <- function(data_path) {
 
   config_file_path <- file.path(data_path, "config.yml")
