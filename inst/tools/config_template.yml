@@ -8,4 +8,4 @@ default:
   density_th: 0.001
   bg_cutoff: 0.99
   spec_file: "your_experimental_specs.csv"
-  merge_by: "Well"
+  merge_by: "ID"

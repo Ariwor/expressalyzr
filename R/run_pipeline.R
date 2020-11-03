@@ -99,7 +99,7 @@ run_pipeline <- function(data_path) {
 
   if (file.exists(s_file_path)) {
     s_file <- data.table::fread(s_file_path)
-    data_dt[, Well := gsub("^.*-([A-Z]{1}\\d{1,2})\\.fcs$", "\\1", File)]
+    data_dt[, ID := gsub("^0(\\d{1})-.*-([A-Z]{1}\\d{1,2})\\.fcs$", "\\1-\\2", File)]
     data_dt <- merge(data_dt, s_file, by = config$merge_by, all.x = TRUE)
   }
 
