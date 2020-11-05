@@ -86,16 +86,19 @@ run_pipeline <- function(data_path) {
 
   # gate populations
   data_dt[, no_negative := rowSums(data_dt[, chs, with = FALSE] <= 0) == 0]
-  cont_dt <- cs_to_dt(cont_cs[config$controls_index[1]])
+  cont_dt <- cs_to_dt(cont_cs)
+  neg_dt <- cf_to_dt(cont_cs[[config$controls_index[1]]])
 
   if (config$manual_cutoff) {
-    config$bg_cutoff <- adjust_threshold(cont_dt[, c("File", chs), with = FALSE], config$bg_cutoff)
+    cont_sub_dt <- cont_dt[, c("File", chs), with = FALSE]
+    config$bg_cutoff <- adjust_threshold(cont_sub_dt, config$bg_cutoff)
     yaml::write_yaml(config, config_file_path)
   }
 
-  cont_dt[, lapply(mget(chs), quantile, config$bg_cutoff),
-          by = .(File)]
-  bg_dt <- cont_dt[, lapply(mget(chs), quantile, config$bg_cutoff)]
+  neg_dt[, lapply(mget(chs), quantile, config$bg_cutoff),
+         by = .(File)]
+
+  bg_dt <- neg_dt[, lapply(mget(chs), quantile, config$bg_cutoff)]
 
   f_pos <- function(channel, values) values >= bg_dt[[channel]]
 
