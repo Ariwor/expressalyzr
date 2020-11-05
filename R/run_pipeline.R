@@ -13,7 +13,8 @@ run_pipeline <- function(data_path) {
 
   create_data_subdir(data_path)
 
-  config <- load_config(data_path)
+  config_file_path <- file.path(data_path, "config.yml")
+  config <- load_config(config_file_path)
 
   # start analysis
   cs <- load_fcs(data_path)
@@ -86,6 +87,11 @@ run_pipeline <- function(data_path) {
   # gate populations
   data_dt[, no_negative := rowSums(data_dt[, chs, with = FALSE] <= 0) == 0]
   cont_dt <- cs_to_dt(cont_cs[config$controls_index[1]])
+
+  if (config$manual_cutoff) {
+    config$bg_cutoff <- adjust_threshold(cont_dt[, c("File", chs), with = FALSE], config$bg_cutoff)
+    yaml::write_yaml(config, config_file_path)
+  }
 
   cont_dt[, lapply(mget(chs), quantile, config$bg_cutoff),
           by = .(File)]

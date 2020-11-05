@@ -7,5 +7,6 @@ default:
   manual_comp: FALSE
   density_th: 0.001
   bg_cutoff: 0.99
+  manual_cutoff: TRUE
   spec_file: "your_experimental_specs.csv"
   merge_by: "ID"

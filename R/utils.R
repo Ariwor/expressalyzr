@@ -78,9 +78,7 @@ create_data_subdir <- function(data_path) {
 #' @param data_path The path to the original data directory.
 #'
 #' @export
-load_config <- function(data_path) {
-
-  config_file_path <- file.path(data_path, "config.yml")
+load_config <- function(config_file_path) {
 
   if (!file.exists(config_file_path)) {
 
@@ -137,4 +135,27 @@ cf_to_dt <- function(cf) {
 cs_to_dt <- function(cs) {
   data_dt <- flowWorkspace::lapply(cs, cf_to_dt)
   return(data.table::rbindlist(data_dt, idcol = "File"))
+}
+
+#'
+#'
+adjust_threshold <- function(cont_dt, th) {
+
+  tall_dt <- data.table::melt(cont_dt, id.vars = "File",
+                              variable.name = "Channel",
+                              value.name = "Intensity")
+
+  while (new_th != "") {
+    pl <- ggplot2::ggplot(data = tall_dt,
+                          ggplot2::aes(x = Intensity, fill = Channel)) +
+      ggplot2::geom_histogram(bins = 64) +
+      ggplot2::geom_vline(ggplot2::aes(xintercept = quantile(Intensity, th))) +
+      ggplot2::scale_x_continuous(trans = "log") +
+      ggplot2::facet_grid(File ~ Channel)
+
+    new_th <- readline("Adjust background cutoff: ")
+    th <- as.numeric(new_th)
+  }
+
+  return(th)
 }

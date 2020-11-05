@@ -19,7 +19,8 @@ Imports:
     openCyto,
     Rmixmod,
     ggcyto,
-    ggplot2
+    ggplot2,
+    yaml
 Suggests: 
     testthat,
     spelling
