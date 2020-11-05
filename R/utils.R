@@ -78,7 +78,7 @@ create_data_subdir <- function(data_path) {
 #' @param data_path The path to the original data directory.
 #'
 #' @export
-load_config <- function(config_file_path) {
+load_config <- function(config_file_path, view_config) {
 
   if (!file.exists(config_file_path)) {
 
@@ -86,10 +86,18 @@ load_config <- function(config_file_path) {
                                  package = "expressalyzr",
                                  mustWork = TRUE)
     file.copy(template_path, config_file_path)
+
+    file_created <- TRUE
+  } else {
+    file_created <- FALSE
   }
 
-  file.edit(config_file_path)
-  readline(prompt = "\nPress [Enter] to continue.")
+  if (view_config || file_created) {
+    file.edit(config_file_path)
+
+    cat("\n")
+    readline(prompt = "Press [Enter] to continue.")
+  }
 
   return(config::get(file = config_file_path))
 }

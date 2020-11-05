@@ -6,7 +6,7 @@
 #' @return
 #' @export
 #'
-run_pipeline <- function(data_path) {
+run_pipeline <- function(data_path, view_config = TRUE) {
 
   # initialize
   experiment_name <- basename(data_path)
@@ -14,7 +14,7 @@ run_pipeline <- function(data_path) {
   create_data_subdir(data_path)
 
   config_file_path <- file.path(data_path, "config.yml")
-  config <- load_config(config_file_path)
+  config <- load_config(config_file_path, view_config)
 
   # start analysis
   cs <- load_fcs(data_path)
@@ -68,7 +68,7 @@ run_pipeline <- function(data_path) {
 
     so_mat <- spillover_matrix(cont_cs,
                                config$controls_index,
-                               config$comp_pattern,
+                               config$channel_pattern,
                                config$density_th,
                                config$manual_comp)
 
@@ -86,12 +86,15 @@ run_pipeline <- function(data_path) {
 
   # gate populations
   data_dt[, no_negative := rowSums(data_dt[, chs, with = FALSE] <= 0) == 0]
+
   cont_dt <- cs_to_dt(cont_cs)
   neg_dt <- cf_to_dt(cont_cs[[config$controls_index[1]]])
 
   if (config$manual_cutoff) {
-    cont_sub_dt <- cont_dt[, c("File", chs), with = FALSE]
+    select_chs <- chs[grepl(config$channel_pattern, chs)]
+    cont_sub_dt <- cont_dt[, c("File", select_chs), with = FALSE]
     config$bg_cutoff <- adjust_threshold(cont_sub_dt, config$bg_cutoff)
+    browser()
     yaml::write_yaml(config, config_file_path)
   }
 
