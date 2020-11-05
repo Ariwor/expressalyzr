@@ -45,9 +45,10 @@ manual_compensation <- function(data, so_mat, chs) {
   for (i in chs) {
     for (j in chs[!chs %in% i]) {
 
-      new_v <- NULL
+      new_v <- so_mat[i, j]
 
       while (!identical(new_v, "")) {
+        so_mat[i, j] <- as.numeric(as.character(new_v))
 
         comp_data <- flowWorkspace::realize_view(data)
         comp_data <- flowWorkspace::compensate(comp_data, so_mat)
@@ -70,10 +71,6 @@ manual_compensation <- function(data, so_mat, chs) {
         print(pl)
 
         new_v <- readline(prompt = "Adjust spillover: ")
-
-        if (!identical(new_v, "")) {
-          so_mat[i, j] <- as.numeric(as.character(new_v))
-        }
       }
     }
   }
