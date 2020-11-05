@@ -88,14 +88,14 @@ run_pipeline <- function(data_path, view_config = TRUE) {
   data_dt[, no_negative := rowSums(data_dt[, chs, with = FALSE] <= 0) == 0]
 
   cont_dt <- cs_to_dt(cont_cs)
-  neg_dt <- cf_to_dt(cont_cs[[config$controls_index[1]]])
+  neg_dt <- cs_to_dt(cont_cs[config$controls_index[1]])
 
   if (config$manual_cutoff) {
     select_chs <- chs[grepl(config$channel_pattern, chs)]
     cont_sub_dt <- cont_dt[, c("File", select_chs), with = FALSE]
     config$bg_cutoff <- adjust_threshold(cont_sub_dt, config$bg_cutoff)
-    browser()
-    yaml::write_yaml(config, config_file_path)
+    write_value <- paste("bg_cutoff:", config$bg_cutoff)
+    write_config(config_file_path, "default", write_value)
   }
 
   neg_dt[, lapply(mget(chs), quantile, config$bg_cutoff),

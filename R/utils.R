@@ -102,6 +102,32 @@ load_config <- function(config_file_path, view_config) {
   return(config::get(file = config_file_path))
 }
 
+#'
+#'
+write_config <- function(config_file_path, active_config, value) {
+
+  config_file <- readLines(config_file_path)
+  config_ind <- which(!grepl("^  .*$", config_file))
+  start_config <- which(grepl(active_config, config_file[config_ind]))
+
+  end_config <- first(config_ind > start_config)
+  if (!end_config) {
+    end_config <- length(config_file)
+  }
+
+  active_section <- config_file[start_config:end_config]
+
+  value_name <- gsub("^(.*):.*$", "\\1", value)
+  value_ind <- which(grepl(value_name, active_section))
+
+  active_section[value_ind] <- paste0("  ", value)
+  config_file[start_config:end_config] <- active_section
+
+  writeLines(config_file, config_file_path)
+
+  return(TRUE)
+}
+
 #' Compute the coefficient of variation
 #'
 comp_cv <- function(x, log_t = FALSE) {
@@ -153,13 +179,20 @@ adjust_threshold <- function(cont_dt, th) {
                               variable.name = "Channel",
                               value.name = "Intensity")
 
-  new_th <- NULL
+  new_th <- th
 
   while (!identical(new_th, "")) {
-    pl <- ggplot2::ggplot(data = tall_dt,
+    th <- as.numeric(as.character(new_th))
+
+    bg_dt <- tall_dt[File == unique(File)[1],
+                     .(Intensity = quantile(Intensity, th)),
+                     by = .(Channel)]
+
+    pl <- ggplot2::ggplot(data = tall_dt[Intensity > 0],
                           ggplot2::aes(x = Intensity, fill = Channel)) +
       ggplot2::geom_histogram(bins = 64) +
-      ggplot2::geom_vline(ggplot2::aes(xintercept = quantile(Intensity, th)),
+      ggplot2::geom_vline(data = bg_dt,
+                          ggplot2::aes(xintercept = Intensity),
                           linetype = "dashed") +
       ggplot2::scale_x_continuous(trans = "log") +
       ggplot2::facet_grid(File ~ Channel, scales = "free_x")
@@ -167,7 +200,6 @@ adjust_threshold <- function(cont_dt, th) {
     print(pl)
 
     new_th <- readline("Adjust background cutoff: ")
-    th <- as.numeric(new_th)
   }
 
   return(th)
