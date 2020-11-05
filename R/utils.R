@@ -159,7 +159,8 @@ adjust_threshold <- function(cont_dt, th) {
     pl <- ggplot2::ggplot(data = tall_dt,
                           ggplot2::aes(x = Intensity, fill = Channel)) +
       ggplot2::geom_histogram(bins = 64) +
-      ggplot2::geom_vline(ggplot2::aes(xintercept = quantile(Intensity, th))) +
+      ggplot2::geom_vline(ggplot2::aes(xintercept = quantile(Intensity, th)),
+                          linetype = "dashed") +
       ggplot2::scale_x_continuous(trans = "log") +
       ggplot2::facet_grid(File ~ Channel, scales = "free_x")
 
