@@ -155,6 +155,8 @@ adjust_threshold <- function(cont_dt, th) {
       ggplot2::scale_x_continuous(trans = "log") +
       ggplot2::facet_grid(File ~ Channel)
 
+    print(pl)
+
     new_th <- readline("Adjust background cutoff: ")
     th <- as.numeric(new_th)
   }
