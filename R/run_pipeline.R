@@ -83,6 +83,7 @@ run_pipeline <- function(data_path) {
 
   chs <- colnames(data_dt)[grepl("FL", colnames(data_dt))]
 
+  # gate populations
   data_dt[, no_negative := rowSums(data_dt[, chs, with = FALSE] <= 0) == 0]
   cont_dt <- cs_to_dt(cont_cs[config$controls_index[1]])
 
