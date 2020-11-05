@@ -24,7 +24,7 @@ generate_transformation <- function(data) {
 
   mods <- Rmixmod::mixmodGaussianModel(listModels = "Gaussian_pk_Lk_Ck")
   strat <- Rmixmod::mixmodStrategy(algo = "EM",
-                                   nbTry = 15,
+                                   nbTry = 30,
                                    initMethod = "random")
   fit <- Rmixmod::mixmodCluster(log(data_dt),
                                 nbCluster = 6:9,
