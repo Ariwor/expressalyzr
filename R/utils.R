@@ -145,7 +145,9 @@ adjust_threshold <- function(cont_dt, th) {
                               variable.name = "Channel",
                               value.name = "Intensity")
 
-  while (new_th != "") {
+  new_th <- NULL
+
+  while (!identical(new_th, "")) {
     pl <- ggplot2::ggplot(data = tall_dt,
                           ggplot2::aes(x = Intensity, fill = Channel)) +
       ggplot2::geom_histogram(bins = 64) +
