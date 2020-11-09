@@ -11,11 +11,11 @@ The goal of expressalyzr is to …
 
 ## Installation
 
-You can install the released version of expressalyzr from
-[CRAN](https://CRAN.R-project.org) with:
+You can install the expressalyzr from
+[GitHub](https://github.com/freitim/expressalyzr) with:
 
 ``` r
-install.packages("expressalyzr")
+devtools::install_github("freitim/expressalyzr", ref = "main")
 ```
 
 ## Example
