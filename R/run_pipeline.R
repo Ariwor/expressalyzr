@@ -21,14 +21,17 @@ run_pipeline <- function(data_path, view_config = TRUE) {
 
   bead_index <- grepl(config$beads_pattern, flowCore::sampleNames(cs))
 
-  if (sum(bead_index) == 1 & config$mefl_trans) {
+  if (sum(bead_index) == 1) {
 
     cs_beads <- cs[bead_index]
     cs <- cs[!bead_index]
 
-    t_fun <- generate_transformation(cs_beads)
-    trans <- TRUE
-
+    if (config$mefl_transform) {
+      t_fun <- generate_transformation(cs_beads)
+      trans <- TRUE
+    } else {
+      trans <- FALSE
+    }
   } else if (sum(bead_index) > 1) {
 
     stop("More than one bead sample found in the dataset. Please restricit the
@@ -36,7 +39,7 @@ run_pipeline <- function(data_path, view_config = TRUE) {
 
   } else {
 
-    message("Bead sample not found or not used. Values will not be transformed to MEFL.")
+    message("Bead sample not found. Values will not be transformed to MEFL.")
     trans <- FALSE
   }
 
