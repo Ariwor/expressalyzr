@@ -66,7 +66,6 @@ run_pipeline <- function(data_path, view_config = TRUE) {
 
   cont_index <- grepl(config$controls_pattern, flowCore::sampleNames(data_cs))
   cont_cs <- data_cs[cont_index]
-  data_cs <- data_cs[!cont_index]
 
   if (!file.exists(so_mat_path) || config$redo_comp) {
 
@@ -82,6 +81,9 @@ run_pipeline <- function(data_path, view_config = TRUE) {
   )
 
   data_cs <- flowWorkspace::compensate(data_cs, so_mat)
+
+  cont_cs <- data_cs[cont_index]
+  data_cs <- data_cs[!cont_index]
 
   # convert cytoset to data table
   data_dt <- cs_to_dt(data_cs)
