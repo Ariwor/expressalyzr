@@ -1,10 +1,11 @@
 default:
+  mefl_trans: FALSE
   beads_pattern: "Beads"
   redo_comp: FALSE
   controls_pattern: "Controls"
   controls_index: !expr c(1, 2, 3, 4, 5) # (Unstained, FL1, FL3, FL6, FL11)
   channel_pattern: "-A"
-  manual_comp: FALSE
+  manual_comp: TRUE
   density_th: 0.001
   bg_cutoff: 0.99
   manual_cutoff: TRUE

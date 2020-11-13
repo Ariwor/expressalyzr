@@ -21,7 +21,7 @@ run_pipeline <- function(data_path, view_config = TRUE) {
 
   bead_index <- grepl(config$beads_pattern, flowCore::sampleNames(cs))
 
-  if (sum(bead_index) == 1) {
+  if (sum(bead_index) == 1 & config$mefl_trans) {
 
     cs_beads <- cs[bead_index]
     cs <- cs[!bead_index]
@@ -33,9 +33,10 @@ run_pipeline <- function(data_path, view_config = TRUE) {
 
     stop("More than one bead sample found in the dataset. Please restricit the
          bead_pattern to one sample.")
+
   } else {
 
-    message("No bead sample found. Values will not be transformed to MEFL.")
+    message("Bead sample not found or not used. Values will not be transformed to MEFL.")
     trans <- FALSE
   }
 
