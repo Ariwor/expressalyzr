@@ -44,7 +44,7 @@ generate_transformation <- function(data) {
     ggplot2::geom_point(alpha = 0.1) +
     ggplot2::scale_x_continuous(trans = "log") +
     ggplot2::scale_y_continuous(trans = "log") +
-    facet_wrap(Cluster~.)
+    ggplot2::facet_wrap(Cluster~.)
 
   print(pl)
 
