@@ -15,6 +15,9 @@ load_fcs <- function(file_path) {
   data_dir <- file.path(file_path, "data")
   fcs_files <- list.files(path = data_dir, pattern = "^.*\\.fcs$", full.names = TRUE)
 
+  for_order <- gsub("^(.*-.)(\\d{1}\\.fcs)$", "\\10\\2", fcs_files)
+  fcs_files <- fcs_files[order(for_order)]
+
   if (identical(fcs_files, character(0))) {
 
     stop("The specified file path does either not exist or does not contain any .fcs files.")
