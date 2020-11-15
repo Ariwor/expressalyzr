@@ -23,9 +23,9 @@ generate_transformation <- function(data) {
   data_dt <- data_dt[rowSums(data_dt <= 0) == 0]
 
   mods <- Rmixmod::mixmodGaussianModel(listModels = "Gaussian_pk_Lk_Ck")
-  strat <- Rmixmod::mixmodStrategy(algo = "EM",
-                                   nbTry = 10,
-                                   initMethod = "random")
+  strat <- Rmixmod::mixmodStrategy(algo = "CEM",
+                                   nbTry = 3,
+                                   initMethod = "smallEM")
   fit <- Rmixmod::mixmodCluster(log(data_dt),
                                 nbCluster = 6:9,
                                 models = mods,
@@ -34,10 +34,19 @@ generate_transformation <- function(data) {
   data_dt[, Cluster := fit["partition"]]
   data.table::setkey(data_dt, Cluster)
 
-  cv_dt <- data_dt[, lapply(.SD, comp_cv, log_t = TRUE), by = .(Cluster)]
+  met_dt <- data_dt[, lapply(.SD, function(x) IQR(x)/median(x)), by = .(Cluster)]
 
-  select_i <- rowSums(cv_dt[, !"Cluster"] > 0.2) == 0
-  select_cl <- cv_dt[select_i]$Cluster
+  select_i <- rowSums(met_dt[, !"Cluster"] > 1.275) == 0
+  select_cl <- met_dt[select_i]$Cluster
+
+  pl <- ggplot2::ggplot(data = data_dt, ggplot2::aes(x = `FL3-A`, y = `FL6-A`,
+                                               color = Cluster %in% select_cl)) +
+    ggplot2::geom_point(alpha = 0.1) +
+    ggplot2::scale_x_continuous(trans = "log") +
+    ggplot2::scale_y_continuous(trans = "log") +
+    facet_wrap(Cluster~.)
+
+  print(pl)
 
   data_dt <- data_dt[Cluster %in% select_cl]
 
@@ -59,15 +68,16 @@ generate_transformation <- function(data) {
 
   tall_dt[, Fit := bead_model(MEFL, Slope, Intercept, Auto), by = .(Channel)]
 
-  pl <- ggplot(tall_dt,
-         aes(x = Intensity,
+  pl <- ggplot2::ggplot(tall_dt,
+         ggplot2::aes(x = Intensity,
              y = MEFL)) +
-    geom_line(aes(x = Fit)) +
-    geom_point(size = 3,
-               aes(color = as.factor(Peak))) +
-    scale_x_continuous(trans = "log") +
-    scale_y_continuous(trans = "log") +
-    facet_wrap(~Channel)
+    ggplot2::geom_line(ggplot2::aes(x = Fit)) +
+    ggplot2::geom_point(size = 3,
+               ggplot2::aes(color = as.factor(Peak))) +
+    ggplot2::scale_x_continuous(trans = "log") +
+    ggplot2::scale_y_continuous(trans = "log") +
+    ggplot2::labs(color = "Peak") +
+    ggplot2::facet_wrap(~Channel)
 
   print(pl)
 
