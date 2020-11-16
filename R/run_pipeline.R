@@ -65,11 +65,12 @@ run_pipeline <- function(data_path, view_config = TRUE) {
   cont_index <- grepl(config$controls_pattern, flowCore::sampleNames(data_cs))
 
   if (length(cont_index) > 0) {
+
     cont_cs <- data_cs[cont_index]
 
-    if (!file.exists(so_mat_path) || config$redo_comp) {
+    so_mat_path <- file.path(data_path, "so_mat.RData")
 
-      so_mat_path <- file.path(data_path, "so_mat.RData")
+    if (!file.exists(so_mat_path) || config$redo_comp) {
 
       so_mat <- spillover_matrix(cont_cs,
                                  config$controls_index,
