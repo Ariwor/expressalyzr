@@ -62,29 +62,36 @@ run_pipeline <- function(data_path, view_config = TRUE) {
   }
 
   # compensation
-  so_mat_path <- file.path(data_path, "so_mat.RData")
-
   cont_index <- grepl(config$controls_pattern, flowCore::sampleNames(data_cs))
-  cont_cs <- data_cs[cont_index]
 
-  if (!file.exists(so_mat_path) || config$redo_comp) {
+  if (length(cont_index) > 0) {
+    cont_cs <- data_cs[cont_index]
 
-    so_mat <- spillover_matrix(cont_cs,
-                               config$controls_index,
-                               config$channel_pattern,
-                               config$density_th,
-                               config$manual_comp)
+    if (!file.exists(so_mat_path) || config$redo_comp) {
 
-    save(so_mat, file = so_mat_path)
-  } else (
-    load(so_mat_path)
-  )
+      so_mat_path <- file.path(data_path, "so_mat.RData")
 
-  data_cs <- flowWorkspace::compensate(data_cs, so_mat)
+      so_mat <- spillover_matrix(cont_cs,
+                                 config$controls_index,
+                                 config$channel_pattern,
+                                 config$density_th,
+                                 config$manual_comp)
 
-  cont_cs <- data_cs[cont_index]
-  data_cs <- data_cs[!cont_index]
+      save(so_mat, file = so_mat_path)
+    } else (
+      load(so_mat_path)
+    )
 
+    data_cs <- flowWorkspace::compensate(data_cs, so_mat)
+
+    cont_cs <- data_cs[cont_index]
+    data_cs <- data_cs[!cont_index]
+
+    cont <- TRUE
+  } else {
+    cont <- FALSE
+    message("No control samples found. Proceeding with out compensation.")
+  }
   # convert cytoset to data table
   data_dt <- cs_to_dt(data_cs)
 
@@ -93,27 +100,30 @@ run_pipeline <- function(data_path, view_config = TRUE) {
   # gate populations
   data_dt[, no_negative := rowSums(data_dt[, chs, with = FALSE] <= 0) == 0]
 
-  cont_dt <- cs_to_dt(cont_cs)
-  neg_dt <- cs_to_dt(cont_cs[config$controls_index[1]])
+  if (cont) {
+    cont_dt <- cs_to_dt(cont_cs)
+    neg_dt <- cs_to_dt(cont_cs[config$controls_index[1]])
 
-  if (config$manual_cutoff) {
-    select_chs <- chs[grepl(config$channel_pattern, chs)]
-    cont_sub_dt <- cont_dt[, c("File", select_chs), with = FALSE]
-    config$bg_cutoff <- adjust_threshold(cont_sub_dt, config$bg_cutoff)
-    write_value <- paste("bg_cutoff:", config$bg_cutoff)
-    write_config(config_file_path, "default", write_value)
+    if (config$manual_cutoff) {
+      select_chs <- chs[grepl(config$channel_pattern, chs)]
+      cont_sub_dt <- cont_dt[, c("File", select_chs), with = FALSE]
+      config$bg_cutoff <- adjust_threshold(cont_sub_dt, config$bg_cutoff)
+      write_value <- paste("bg_cutoff:", config$bg_cutoff)
+      write_config(config_file_path, "default", write_value)
+    }
+
+    neg_dt[, lapply(mget(chs), quantile, config$bg_cutoff),
+           by = .(File)]
+
+    bg_dt <- neg_dt[, lapply(mget(chs), quantile, config$bg_cutoff)]
+
+    f_pos <- function(channel, values) values >= bg_dt[[channel]]
+
+    pos_chs <- paste0(chs, "_pos")
+    data_dt[, (pos_chs) := lapply(chs, function(ch) f_pos(ch, get(ch))), by = .(File)]
   }
 
-  neg_dt[, lapply(mget(chs), quantile, config$bg_cutoff),
-         by = .(File)]
-
-  bg_dt <- neg_dt[, lapply(mget(chs), quantile, config$bg_cutoff)]
-
-  f_pos <- function(channel, values) values >= bg_dt[[channel]]
-
-  pos_chs <- paste0(chs, "_pos")
-  data_dt[, (pos_chs) := lapply(chs, function(ch) f_pos(ch, get(ch))), by = .(File)]
-
+  # assign experimental specifications
   s_file_path <- file.path(data_path, config$spec_file)
 
   if (file.exists(s_file_path)) {
