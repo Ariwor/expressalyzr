@@ -86,10 +86,12 @@ filter_density <- function(data, channels, bins, th) {
 
   chs <- paste0(channels, "_bin")
 
-  data_dt[, (chs) := lapply(.SD, q_bin,
+  data_dt[, (chs) := lapply(.SD, bin,
                             bins = bins, s_fun = mean),
-          .SDcols = channels, by = .(File)]
-  data_dt[, count_per_bin := .N, by = .(`FL1-A_bin`, `FL11-A_bin`, File)]
+          .SDcols = channels,
+          by = .(File)]
+
+  data_dt[, count_per_bin := .N, by = c(chs, "File")]
   data_dt[, density := count_per_bin / .N, by = .(File)]
 
   data_dt <- data_dt[density > th]
