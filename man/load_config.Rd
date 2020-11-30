@@ -4,7 +4,7 @@
 \alias{load_config}
 \title{Create and/or load configuration file.}
 \usage{
-load_config(data_path)
+load_config(config_file_path, view_config)
 }
 \arguments{
 \item{data_path}{The path to the original data directory.}

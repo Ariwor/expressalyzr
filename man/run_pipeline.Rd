@@ -4,7 +4,7 @@
 \alias{run_pipeline}
 \title{Run the data processing pipline}
 \usage{
-run_pipeline(data_path)
+run_pipeline(data_path, view_config = TRUE)
 }
 \value{
 
