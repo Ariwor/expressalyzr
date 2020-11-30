@@ -1,5 +1,5 @@
 default:
-  mefl_trans: FALSE
+  mefl_transform: FALSE
   beads_pattern: "Beads"
   redo_comp: FALSE
   controls_pattern: "Controls"
