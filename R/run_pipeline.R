@@ -133,5 +133,6 @@ run_pipeline <- function(data_path, view_config = TRUE) {
     data_dt <- merge(data_dt, s_file, by = config$merge_by, all.x = TRUE)
   }
 
+  data.table::fwrite(data_dt, file = file.path(data_path, paste0(experiment_name, ".csv")))
   return(data_dt)
 }
