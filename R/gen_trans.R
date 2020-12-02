@@ -39,14 +39,14 @@ generate_transformation <- function(data) {
   select_i <- rowSums(met_dt[, !"Cluster"] > 1.275) == 0
   select_cl <- met_dt[select_i]$Cluster
 
-  pl <- ggplot2::ggplot(data = data_dt, ggplot2::aes(x = `FL3-A`, y = `FL6-A`,
-                                               color = Cluster %in% select_cl)) +
-    ggplot2::geom_point(alpha = 0.1) +
-    ggplot2::scale_x_continuous(trans = "log") +
-    ggplot2::scale_y_continuous(trans = "log") +
-    ggplot2::facet_wrap(Cluster~.)
+  # pl <- ggplot2::ggplot(data = data_dt, ggplot2::aes(x = `FL3-A`, y = `FL6-A`,
+  #                                              color = Cluster %in% select_cl)) +
+  #   ggplot2::geom_point(alpha = 0.1) +
+  #   ggplot2::scale_x_continuous(trans = "log") +
+  #   ggplot2::scale_y_continuous(trans = "log") +
+  #   ggplot2::facet_wrap(Cluster~.)
 
-  print(pl)
+  # print(pl)
 
   data_dt <- data_dt[Cluster %in% select_cl]
 
