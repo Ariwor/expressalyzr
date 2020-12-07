@@ -24,8 +24,8 @@ generate_transformation <- function(data) {
 
   mods <- Rmixmod::mixmodGaussianModel(listModels = "Gaussian_pk_Lk_Ck")
   strat <- Rmixmod::mixmodStrategy(algo = "CEM",
-                                   nbTry = 3,
-                                   initMethod = "smallEM")
+                                   nbTry = 50,
+                                   initMethod = "random")
   fit <- Rmixmod::mixmodCluster(log(data_dt),
                                 nbCluster = 6:9,
                                 models = mods,
@@ -39,13 +39,13 @@ generate_transformation <- function(data) {
   select_i <- rowSums(met_dt[, !"Cluster"] > 1.275) == 0
   select_cl <- met_dt[select_i]$Cluster
 
-  # pl <- ggplot2::ggplot(data = data_dt, ggplot2::aes(x = `FL3-A`, y = `FL6-A`,
-  #                                              color = Cluster %in% select_cl)) +
+  # pl <- ggplot2::ggplot(data = data_dt, ggplot2::aes(x = `FL1-A`, y = `FL3-A`,
+  #                                                    color = Cluster %in% select_cl)) +
   #   ggplot2::geom_point(alpha = 0.1) +
   #   ggplot2::scale_x_continuous(trans = "log") +
   #   ggplot2::scale_y_continuous(trans = "log") +
   #   ggplot2::facet_wrap(Cluster~.)
-
+  #
   # print(pl)
 
   data_dt <- data_dt[Cluster %in% select_cl]
@@ -58,6 +58,8 @@ generate_transformation <- function(data) {
   data_dt[, Peak := (1 + peaks - length(Cluster)) : peaks]
   data_dt <- merge(data_dt, mefl_dt, by = "Peak")
 
+  data_dt <- data_dt[!is.na(MEFL)]
+
   tall_dt <- melt(data_dt,
                   id.vars = c("Peak", "Cluster", "MEFL"),
                   variable.name = "Channel",
@@ -69,11 +71,11 @@ generate_transformation <- function(data) {
   tall_dt[, Fit := bead_model(MEFL, Slope, Intercept, Auto), by = .(Channel)]
 
   pl <- ggplot2::ggplot(tall_dt,
-         ggplot2::aes(x = Intensity,
-             y = MEFL)) +
+                        ggplot2::aes(x = Intensity,
+                                     y = MEFL)) +
     ggplot2::geom_line(ggplot2::aes(x = Fit)) +
     ggplot2::geom_point(size = 3,
-               ggplot2::aes(color = as.factor(Peak))) +
+                        ggplot2::aes(color = as.factor(Peak))) +
     ggplot2::scale_x_continuous(trans = "log") +
     ggplot2::scale_y_continuous(trans = "log") +
     ggplot2::labs(color = "Peak") +
