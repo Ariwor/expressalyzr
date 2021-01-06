@@ -64,9 +64,12 @@ run_pipeline <- function(data_path, view_config = TRUE) {
   # compensation
   cont_index <- grepl(config$controls_pattern, flowCore::sampleNames(data_cs))
 
-  if (sum(cont_index) > 2) {
-
+  n_controls <- sum(cont_index)
+  if (n_controls > 0) {
     cont_cs <- data_cs[cont_index]
+  }
+
+  if (n_controls > 2) {
 
     so_mat_path <- file.path(data_path, "so_mat.RData")
 
@@ -79,18 +82,13 @@ run_pipeline <- function(data_path, view_config = TRUE) {
                                  config$manual_comp)
 
       save(so_mat, file = so_mat_path)
-    } else (
+    } else {
       load(so_mat_path)
-    )
+    }
 
     data_cs <- flowWorkspace::compensate(data_cs, so_mat)
-
-    cont_cs <- data_cs[cont_index]
     data_cs <- data_cs[!cont_index]
-
-    cont <- TRUE
   } else {
-    cont <- FALSE
     message("No control samples found. Proceeding with out compensation.")
   }
   # convert cytoset to data table
@@ -101,7 +99,7 @@ run_pipeline <- function(data_path, view_config = TRUE) {
   # gate populations
   data_dt[, no_negative := rowSums(data_dt[, chs, with = FALSE] <= 0) == 0]
 
-  if (cont) {
+  if (n_controls > 0) {
     cont_dt <- cs_to_dt(cont_cs)
     neg_dt <- cs_to_dt(cont_cs[config$controls_index[1]])
 
