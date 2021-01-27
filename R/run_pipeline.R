@@ -128,7 +128,7 @@ run_pipeline <- function(data_path, view_config = TRUE) {
   if (file.exists(s_file_path)) {
     s_file <- data.table::fread(s_file_path)
     s_file[, (config$merge_by) := gsub("^0(\\d{1})(.*)$", "\\1\\2", get(config$merge_by))]
-    data_dt[, ID := gsub("^0(\\d{1})-.*-([A-Z]{1}\\d{1,2})\\.fcs$", "\\1-\\2", File)]
+    data_dt[, (config$merge_by) := gsub("^0(\\d{1})-.*-([A-Z]{1}\\d{1,2})\\.fcs$", "\\1-\\2", File)]
     data_dt <- merge(data_dt, s_file, by = config$merge_by, all.x = TRUE)
   }
 
