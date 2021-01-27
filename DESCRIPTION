@@ -20,7 +20,9 @@ Imports:
     Rmixmod,
     ggcyto,
     ggplot2,
-    yaml
+    yaml,
+    gsl,
+    RcppGSL
 Suggests: 
     testthat,
     spelling
