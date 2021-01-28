@@ -1,6 +1,6 @@
 #'
 mixture_gate <- function(fr, pp_res, channels = NA, filterId = "",
-                         n_samples = NULL, alg = "CEM", th = 1e-14,
+                         n_samples = NULL, alg = "CEM", th = 2e-14,
                          n_clusters = 1:5, log_t = FALSE) {
 
   max_r <- range(fr)[2, ]
@@ -19,7 +19,7 @@ mixture_gate <- function(fr, pp_res, channels = NA, filterId = "",
   mods <- Rmixmod::mixmodGaussianModel(listModels = "Gaussian_pk_Lk_Ck")
 
   strat <- Rmixmod::mixmodStrategy(algo = alg,
-                                   nbTry = 10,
+                                   nbTry = 20,
                                    initMethod = "smallEM")
 
   fit <- Rmixmod::mixmodCluster(dat,
