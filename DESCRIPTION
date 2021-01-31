@@ -22,7 +22,8 @@ Imports:
     ggplot2,
     yaml,
     gsl,
-    RcppGSL
+    RcppGSL,
+    Rfast
 Suggests: 
     testthat,
     spelling
