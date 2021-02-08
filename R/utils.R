@@ -84,11 +84,12 @@ create_data_subdir <- function(data_path) {
 load_config <- function(config_file_path, view_config) {
 
   if (!file.exists(config_file_path)) {
-
-    template_path <- system.file("tools", "config_template.yml",
-                                 package = "expressalyzr",
-                                 mustWork = TRUE)
+    for (template_file in c("config_template.yml", "gt_samples.csv")) {
+      template_path <- system.file("tools", template_file,
+                                   package = "expressalyzr",
+                                   mustWork = TRUE)
     file.copy(template_path, config_file_path)
+    }
 
     file_created <- TRUE
   } else {

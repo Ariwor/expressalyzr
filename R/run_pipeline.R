@@ -16,6 +16,15 @@ run_pipeline <- function(data_path, view_config = TRUE) {
   config_file_path <- file.path(data_path, "config.yml")
   config <- load_config(config_file_path, view_config)
 
+  gt_file <- file.path(data_path, "gt_samples.csv")
+
+  if (config$adjust_gating) {
+    file.edit(gt_file)
+
+    cat("\n")
+    readline(prompt = "Press [Enter] to continue.")
+  }
+
   # start analysis
   cs <- load_fcs(data_path)
 
@@ -44,9 +53,6 @@ run_pipeline <- function(data_path, view_config = TRUE) {
   }
 
   # gating
-  gt_file <- system.file("tools", "gt_samples.csv", package = "expressalyzr",
-                         mustWork = TRUE)
-
   gt <- openCyto::gatingTemplate(gt_file)
   gs <- flowWorkspace::GatingSet(cs)
 

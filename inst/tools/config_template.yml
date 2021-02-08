@@ -11,3 +11,4 @@ default:
   manual_cutoff: TRUE
   spec_file: "your_experimental_specs.csv"
   merge_by: "ID"
+  adjust_gating: FALSE
