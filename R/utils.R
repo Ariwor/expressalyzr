@@ -84,12 +84,18 @@ create_data_subdir <- function(data_path) {
 load_config <- function(config_file_path, view_config) {
 
   if (!file.exists(config_file_path)) {
-    for (template_file in c("config_template.yml", "gt_samples.csv")) {
-      template_path <- system.file("tools", template_file,
+
+    template_path <- system.file("tools", "config_template.yml",
+                                 package = "expressalyzr",
+                                 mustWork = TRUE)
+    file.copy(template_path, config_file_path)
+
+    template_gating <- system.file("tools", "gt_samples.csv",
                                    package = "expressalyzr",
                                    mustWork = TRUE)
-    file.copy(template_path, config_file_path)
-    }
+
+    gating_file_path <- file.path(dirname(config_file_path), "gt_samples.csv")
+    file.copy(template_gating, gating_file_path)
 
     file_created <- TRUE
   } else {
