@@ -28,7 +28,7 @@ spillover_matrix <- function(data, cont_ind, comp_pattern, threshold, manual_com
                                 stain_match = "ordered")
 
   if (manual_comp) {
-    manual_compensation(data[-cont_ind[1], chs], so_mat, chs)
+    so_mat <- manual_compensation(data[-cont_ind[1], chs], so_mat, chs)
   }
 
   return(so_mat)
@@ -76,6 +76,7 @@ manual_compensation <- function(data, so_mat, chs) {
       }
     }
   }
+  return(so_mat)
 }
 
 #' Filter data according to a density threshold.
