@@ -130,12 +130,14 @@ run_pipeline <- function(data_path, view_config = TRUE) {
   }
 
   # new background removal
-  data_dt[(positive), (paste0(config$bg_channels, "_bg")) := lapply(mget(config$bg_channels),
-                                                          assign_bg,
-                                                          n_comp = NULL,
-                                                          rm = 1,
-                                                          inspect = FALSE),
-          by = .(File)]
+  if (!is.null(config$bg_channels)) {
+    data_dt[(positive), (paste0(config$bg_channels, "_bg")) := lapply(mget(config$bg_channels),
+                                                                      assign_bg,
+                                                                      n_comp = NULL,
+                                                                      rm = 1,
+                                                                      inspect = FALSE),
+            by = .(File)]
+  }
 
   # assign experimental specifications
   s_file_path <- file.path(data_path, config$spec_file)
