@@ -12,3 +12,4 @@ default:
   spec_file: "your_experimental_specs.csv"
   merge_by: "ID"
   adjust_gating: FALSE
+  bg_channels: !expr c("FL1-H", "FL3-H", "FL11-H")

@@ -18,7 +18,7 @@ mixture_gate <- function(fr, pp_res, channels = NA, filterId = "",
   mods <- Rmixmod::mixmodGaussianModel(listModels = "Gaussian_pk_Lk_Ck")
 
   strat <- Rmixmod::mixmodStrategy(algo = alg,
-                                   nbTry = 50,
+                                   nbTry = 20,
                                    initMethod = "smallEM",
                                    epsilonInAlgo = 1e-06)
 

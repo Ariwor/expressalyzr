@@ -128,6 +128,15 @@ run_pipeline <- function(data_path, view_config = TRUE) {
     data_dt[, (pos_chs) := lapply(chs, function(ch) f_pos(ch, get(ch))), by = .(File)]
   }
 
+  # new background removal
+  bg_channels <- c("FL1-H", "FL3-H")
+  data_dt[(no_negative), (paste0(config$bg_channels, "_bg")) := lapply(mget(config$bg_channels),
+                                                          assign_bg,
+                                                          n_comp = NULL,
+                                                          rm = 1,
+                                                          inspect = FALSE),
+          by = .(File)]
+
   # assign experimental specifications
   s_file_path <- file.path(data_path, config$spec_file)
 
