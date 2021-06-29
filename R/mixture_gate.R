@@ -2,7 +2,7 @@
 mixture_gate <- function(fr, pp_res, channels = NA, filterId = "",
                          n_samples = NULL, alg = "CEM", th = 2e-14,
                          n_clusters = 1:5, log_t = FALSE) {
-
+  print(th)
   max_r <- range(fr)[2, ]
   dat <- as.data.frame(flowCore::exprs(fr))
   dat <- dat[dat$`FSC-A` <= max_r[[1]] & dat$`SSC-A` <= max_r[[2]], ]
@@ -19,8 +19,9 @@ mixture_gate <- function(fr, pp_res, channels = NA, filterId = "",
   mods <- Rmixmod::mixmodGaussianModel(listModels = "Gaussian_pk_Lk_Ck")
 
   strat <- Rmixmod::mixmodStrategy(algo = alg,
-                                   nbTry = 20,
-                                   initMethod = "smallEM")
+                                   nbTry = 50,
+                                   initMethod = "smallEM",
+                                   epsilonInAlgo = 1e-06)
 
   fit <- Rmixmod::mixmodCluster(dat,
                                 dataType = "quantitative",
