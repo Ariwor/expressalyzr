@@ -23,15 +23,11 @@ assign_bg <- function(x, n_comp = NULL, log = TRUE, inspect = FALSE, rm = 1) {
   fit <- mixtools::normalmixEM(x, k = n_comp, maxit = 50000, epsilon = 1e-08, fast = fast)
   bg_index <- which(fit$mu %in% head(sort(fit$mu), rm))
   if (inspect) {
-    # par(mfrow = c(1, 2))
     mixtools::plot.mixEM(fit, whichplots = 2, n = 120)
     title(sub = paste("\t\t\t\t\t\t\t\t\t\t\t\tCV = ", cv_x,
                       "\n\t\t\t\t\t\t\t\t\t\t\t\tAIC = ", 2 * fit$loglik + (n_comp * 3 - 1) * 2,
                       "\n\t\t\t\t\t\t\t\t\t\t\t\tBIC = ", 2 * fit$loglik + (n_comp * 3 - 1) * log(length(x))),
           xlab = "")
-    # qfun <- function(p) qnorm(p, fit$mu[bg_index], fit$sigma[bg_index])
-    # qqplot(qfun(ppoints(length(x))), x)
-    # abline(a = 0, b = 1)
   }
 
   if (length(bg_index) < 2) {

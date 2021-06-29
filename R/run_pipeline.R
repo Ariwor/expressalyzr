@@ -104,6 +104,7 @@ run_pipeline <- function(data_path, view_config = TRUE) {
 
   # gate populations
   data_dt[, no_negative := rowSums(data_dt[, chs, with = FALSE] <= 0) == 0]
+  data_dt[, positive := rowSums(data_dt[, chs, with = FALSE] < 0) == 0]
 
   if (n_controls > 0) {
     cont_dt <- cs_to_dt(cont_cs)
@@ -129,8 +130,7 @@ run_pipeline <- function(data_path, view_config = TRUE) {
   }
 
   # new background removal
-  bg_channels <- c("FL1-H", "FL3-H")
-  data_dt[(no_negative), (paste0(config$bg_channels, "_bg")) := lapply(mget(config$bg_channels),
+  data_dt[(positive), (paste0(config$bg_channels, "_bg")) := lapply(mget(config$bg_channels),
                                                           assign_bg,
                                                           n_comp = NULL,
                                                           rm = 1,
