@@ -2,7 +2,6 @@
 mixture_gate <- function(fr, pp_res, channels = NA, filterId = "",
                          n_samples = NULL, alg = "CEM", th = 2e-14,
                          n_clusters = 1:5, log_t = FALSE) {
-  print(th)
   max_r <- range(fr)[2, ]
   dat <- as.data.frame(flowCore::exprs(fr))
   dat <- dat[dat$`FSC-A` <= max_r[[1]] & dat$`SSC-A` <= max_r[[2]], ]
