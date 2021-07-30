@@ -6,7 +6,7 @@
 #' @return
 #' @export
 #'
-run_pipeline <- function(data_path, view_config = TRUE) {
+run_pipeline <- function(data_path, view_config = TRUE, inspect_gating = FALSE) {
 
   # initialize
   experiment_name <- basename(data_path)
@@ -53,13 +53,20 @@ run_pipeline <- function(data_path, view_config = TRUE) {
   }
 
   # gating
+  openCyto::register_plugins(fun = density_gate, "density_gate", dep = NA, "gating")
+  openCyto::register_plugins(fun = mixture_gate, "mixture_gate", dep = NA, "gating")
+
   gt <- openCyto::gatingTemplate(gt_file)
   gs <- flowWorkspace::GatingSet(cs)
 
-  openCyto::register_plugins(fun = mixture_gate, methodName = "mixture_gate",
-                             dep = c("Rmixmod"), "gating")
-
   openCyto::gt_gating(gt, gs)
+
+  if (inspect_gating) {
+    for (i in 1:length(gs)) {
+      print(autoplot(gs[[i]]))
+      readline()
+    }
+  }
 
   data_cs <- flowWorkspace::gs_pop_get_data(gs, y = "singlets")
 

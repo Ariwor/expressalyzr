@@ -1,6 +1,6 @@
 #'
 mixture_gate <- function(fr, pp_res, channels = NA, filterId = "",
-                         n_samples = NULL, alg = "CEM", th = 2e-14,
+                         n_samples = NULL, alg = "CEM", th = 1e-14,
                          n_clusters = 1:5, log_t = FALSE) {
   max_r <- range(fr)[2, ]
   dat <- as.data.frame(flowCore::exprs(fr))
