@@ -1,0 +1,4 @@
+alias, pop, parent, dims, gating_method, gating_args, collapseDataForGating, groupBy, preprocessing_method, preprocessing_args
+nonDebris, +, root,"FSC-A, SSC-A",boundary,"min = c(0, 1e3), max=c(2.5e5,2.5e5)",,,,
+cells1, +,nonDebris,"FSC-A, SSC-A",mixture_gate,"n_clusters = 3:5, n_samples = 3000, th = 1e-02, log_t = TRUE", , , , 
+singlets, +,cells1,"FSC-A, FSC-H",singletGate,, , , , 
