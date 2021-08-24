@@ -218,3 +218,36 @@ adjust_threshold <- function(cont_dt, th) {
 
   return(th)
 }
+
+#' Create multiple data subdirectories.
+#'
+#' This is a utility function for creating multiple subdirectories according to unique/similar data files in the
+#' data path and moving the data files into the respective subdirectories This way the analysis results and data
+#' stay separated and the analysis can run for datasets (usually paired) in different subdirectories.
+#'
+#' @param data_path The path to the original data directory.
+#' @param nchars_in_samples Number of first characters in the sample names for sample identification
+#'
+#' @return
+#'
+create_multiple_data_subdir <- function(data_path, nchars_in_samples) {
+  
+  setwd(data_path) # Probably there is a better way to do this
+  
+  # Get file names
+  data_files <- list.files(data_path)
+  data_files <- data_files[!grepl("\\.R$|\\.yml$|\\.csv$", data_files)]
+  
+  # Create folder names for each unique (defined by the user) file name
+  foldernames <- file.path("data", stringr::str_extract(data_files, nchars_in_samples))
+  foldernames.unique <- unique(foldernames)
+  
+  # Create folders based on unique folder names
+  output <- lapply(foldernames.unique, dir.create, recursive = TRUE)
+  
+  # Move files
+  file.rename(file.path(data_path, data_files), file.path(foldernames, data_files))
+  
+  return(output)
+}
+
