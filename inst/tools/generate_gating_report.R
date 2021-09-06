@@ -9,6 +9,6 @@ cat(paste0("#' ", experiment_name))
 pops <- flowWorkspace::gs_get_pop_paths(gs, path = "auto")
 
 for (pop in pops[2:length(pops)]) {
-  p <- ggcyto::autoplot(gs, pop)
+  p <- ggcyto::autoplot(gs, pop, bins = 60)
   print(p)
 }
