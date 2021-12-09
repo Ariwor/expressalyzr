@@ -61,17 +61,19 @@ run_pipeline <- function(data_path, view_config = TRUE, gating_output = NULL) {
 
   openCyto::gt_gating(gt, gs)
 
-  if (gating_output == "inspect") {
-    for (i in 1:length(gs)) {
-      print(autoplot(gs[[i]]))
-      readline()
+  if (!is.null(gating_output)) {
+    if (gating_output == "inspect") {
+      for (i in 1:length(gs)) {
+        print(autoplot(gs[[i]]))
+        readline()
+      }
+    } else if (gating_output == "report") {
+      rmarkdown::render(system.file("tools","generate_gating_report.R", package = "expressalyzr",
+                                    mustWork = TRUE),
+                        output_file = file.path(data_path, paste0(experiment_name, "_gating.html")))
+    } else if (gating_output == "set") {
+      return(gs)
     }
-  } else if (gating_output == "report") {
-    rmarkdown::render(system.file("tools","generate_gating_report.R", package = "expressalyzr",
-                                  mustWork = TRUE),
-                      output_file = file.path(data_path, paste0(experiment_name, "_gating.html")))
-  } else if (gating_output == "set") {
-    return(gs)
   }
 
   data_cs <- flowWorkspace::gs_pop_get_data(gs, y = "singlets")
