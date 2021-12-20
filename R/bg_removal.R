@@ -11,7 +11,6 @@ assign_bg <- function(x, n_comp = NULL, log = TRUE, inspect = FALSE, rm = 1) {
       n_comp <- 3
     } else {
       n_comp <- 2
-      fast <- TRUE
     }
   }
 

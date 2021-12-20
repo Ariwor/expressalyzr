@@ -91,6 +91,8 @@ run_pipeline <- function(data_path, view_config = TRUE, gating_output = NULL) {
   # compensation
   cont_index <- grepl(config$controls_pattern, flowCore::sampleNames(data_cs))
 
+  print(flowCore::sampleNames(data_cs)[cont_index])
+
   n_controls <- sum(cont_index)
   if (n_controls > 0) {
     cont_cs <- data_cs[cont_index]
