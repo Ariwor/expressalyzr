@@ -28,6 +28,28 @@ run_pipeline <- function(data_path, view_config = TRUE, gating_output = NULL) {
   # start analysis
   cs <- load_fcs(data_path)
 
+  to_cytoflex_channels <- list(
+    "445 [B]-A" = "FL6-A",
+    "445 [B]-H" = "FL6-H",
+    "445 [B]-W" = "FL6-Width",
+    "488 [C]-A" = "FL1-A",
+    "488 [C]-H" = "FL1-H",
+    "488 [C]-W" = "FL1-Width",
+    "640 [C]-A" = "FL3-A",
+    "640 [C]-H" = "FL3-H",
+    "640 [C]-W" = "FL3-Width"
+  )
+
+  chs <- flowWorkspace::colnames(cs)
+
+  for (i in seq_along(chs)) {
+    if (!is.null(to_cytoflex_channels[[chs[i]]])) {
+      chs[i] <- to_cytoflex_channels[[chs[i]]]
+    }
+  }
+
+  flowWorkspace::colnames(cs) <- chs
+
   bead_index <- grepl(config$beads_pattern, flowCore::sampleNames(cs))
 
   if (sum(bead_index) == 1) {
@@ -72,14 +94,7 @@ run_pipeline <- function(data_path, view_config = TRUE, gating_output = NULL) {
                                     mustWork = TRUE),
                         output_file = file.path(data_path, paste0(experiment_name, "_gating.html")))
     } else if (gating_output == "set") {
-      return(gs)
-    }
-  } else if (gating_output == "report") {
-    rmarkdown::render(system.file("tools","generate_gating_report.R", package = "expressalyzr",
-                                  mustWork = TRUE),
-                      output_file = file.path(data_path, paste0(experiment_name, "_gating.html")))
-  } else if (gating_output == "set") {
-    flowWorkspace::save_gs(gs, path = "gs")
+      flowWorkspace::save_gs(gs, path = "gs")    }
   }
 
   data_cs <- flowWorkspace::gs_pop_get_data(gs, y = "singlets")
@@ -96,6 +111,9 @@ run_pipeline <- function(data_path, view_config = TRUE, gating_output = NULL) {
   n_controls <- sum(cont_index)
   if (n_controls > 0) {
     cont_cs <- data_cs[cont_index]
+    cont_names <- flowCore::sampleNames(cont_cs)
+    cont_order <- gtools::mixedorder(gsub("^.*([A-Z]\\d{1,2}).fcs", "\\1", cont_names))
+    cont_cs <- cont_cs[cont_order]
   }
 
   if (n_controls > 2) {
@@ -116,10 +134,11 @@ run_pipeline <- function(data_path, view_config = TRUE, gating_output = NULL) {
     }
 
     data_cs <- flowWorkspace::compensate(data_cs, so_mat)
-    data_cs <- data_cs[!cont_index]
+    # data_cs <- data_cs[!cont_index]
   } else {
     message("No control samples found. Proceeding with out compensation.")
   }
+
   # convert cytoset to data table
   data_dt <- cs_to_dt(data_cs)
 

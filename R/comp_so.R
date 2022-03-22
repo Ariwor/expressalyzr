@@ -6,7 +6,7 @@ spillover_matrix <- function(data, cont_ind, comp_pattern, threshold, manual_com
     stop("Number of control samples and index of control samples are of different length.")
   }
 
-  data <- data[order(flowCore::sampleNames(data))]
+  # data <- data[order(flowCore::sampleNames(data))]
 
   data <- data[cont_ind]
 
