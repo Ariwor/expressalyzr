@@ -56,10 +56,8 @@ manual_compensation <- function(data, so_mat, chs) {
                               ggplot2::aes(x = get(j), y = get(i))) +
           ggplot2::geom_hex(ggplot2::aes(fill = ..density..),
                             bins = 64) +
-          ggplot2::scale_x_continuous(trans = "log10")+#,
-                                      # limits = ch_r) +
-          ggplot2::scale_y_continuous(trans = "log10")+#,
-                                      # limits = ch_r) +
+          ggplot2::scale_x_continuous(trans = "log10", limits = c(NA, ch_r[2])) +
+          ggplot2::scale_y_continuous(trans = "log10", limits = c(NA, ch_r[2])) +
           ggplot2::xlab(j) +
           ggplot2::ylab(i) +
           ggplot2::scale_fill_viridis_c() +
