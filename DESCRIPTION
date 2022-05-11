@@ -23,7 +23,8 @@ Imports:
     yaml,
     gsl,
     RcppGSL,
-    Rfast
+    Rfast,
+    rmarkdown
 Suggests: 
     testthat,
     spelling
