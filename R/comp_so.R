@@ -7,7 +7,6 @@ spillover_matrix <- function(data, cont_ind, comp_pattern, threshold, manual_com
   }
 
   # data <- data[order(flowCore::sampleNames(data))]
-
   data <- data[cont_ind]
 
   comp_pattern <- paste0("FL\\d{1,2}", comp_pattern)

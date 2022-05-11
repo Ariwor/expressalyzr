@@ -112,16 +112,14 @@ run_pipeline <- function(data_path, view_config = TRUE, gating_output = NULL) {
   if (n_controls > 0) {
     cont_cs <- data_cs[cont_index]
     cont_names <- flowCore::sampleNames(cont_cs)
-    cont_order <- gtools::mixedorder(gsub("^.*([A-Z]\\d{1,2}).fcs", "\\1", cont_names))
+    cont_order <- gtools::mixedorder(gsub("^.*([A-Z]{0,1}\\d{1,2}).fcs", "\\1", cont_names))
     cont_cs <- cont_cs[cont_order]
   }
 
   if (n_controls > 2) {
-
     so_mat_path <- file.path(data_path, "so_mat.RData")
 
     if (!file.exists(so_mat_path) || config$redo_comp) {
-
       so_mat <- spillover_matrix(cont_cs,
                                  config$controls_index,
                                  config$channel_pattern,
