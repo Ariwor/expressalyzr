@@ -18,7 +18,7 @@ spillover_matrix <- function(data, cont_ind, comp_pattern, threshold, manual_com
 
   data <- filter_density(data, chs, n_bins, threshold)
 
-  so_mat <- flowCore::spillover(data,
+  so_mat <- flowStats::spillover(data,
                                 unstained = 1,
                                 patt = comp_pattern,
                                 fsc = "FSC-A",
