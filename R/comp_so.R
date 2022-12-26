@@ -6,8 +6,7 @@ spillover_matrix <- function(data, cont_ind, comp_pattern, threshold, manual_com
     stop("Number of control samples and index of control samples are of different length.")
   }
 
-  data <- data[order(flowCore::sampleNames(data))]
-
+  # data <- data[order(flowCore::sampleNames(data))]
   data <- data[cont_ind]
 
   comp_pattern <- paste0("FL\\d{1,2}", comp_pattern)
@@ -57,10 +56,8 @@ manual_compensation <- function(data, so_mat, chs) {
                               ggplot2::aes(x = get(j), y = get(i))) +
           ggplot2::geom_hex(ggplot2::aes(fill = ..density..),
                             bins = 64) +
-          ggplot2::scale_x_continuous(trans = "log",
-                                      limits = ch_r) +
-          ggplot2::scale_y_continuous(trans = "log",
-                                      limits = ch_r) +
+          ggplot2::scale_x_continuous(trans = "log10", limits = c(NA, ch_r[2])) +
+          ggplot2::scale_y_continuous(trans = "log10", limits = c(NA, ch_r[2])) +
           ggplot2::xlab(j) +
           ggplot2::ylab(i) +
           ggplot2::scale_fill_viridis_c() +
@@ -89,6 +86,16 @@ filter_density <- function(data, channels, bins, th) {
 
   chs <- paste0(channels, "_bin")
 
+  data_dt[, (channels) := lapply(.SD, log),
+          .SDcols = channels,
+          by = .(File)]
+
+  data_dt <- na.omit(data_dt)
+
+  for (ch in channels) {
+    data_dt <- data_dt[!is.infinite(get(ch))]
+  }
+
   data_dt[, (chs) := lapply(.SD, bin,
                             bins = bins, s_fun = mean),
           .SDcols = channels,
@@ -98,6 +105,10 @@ filter_density <- function(data, channels, bins, th) {
   data_dt[, density := count_per_bin / .N, by = .(File)]
 
   data_dt <- data_dt[density > th]
+
+  data_dt[, (channels) := lapply(.SD, exp),
+          .SDcols = channels,
+          by = .(File)]
 
   col_remove <- c("File", chs, "count_per_bin", "density")
 

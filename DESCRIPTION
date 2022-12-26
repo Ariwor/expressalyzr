@@ -23,7 +23,9 @@ Imports:
     yaml,
     gsl,
     RcppGSL,
-    Rfast
+    Rfast,
+    rmarkdown,
+    mixtools
 Suggests: 
     testthat,
     spelling
